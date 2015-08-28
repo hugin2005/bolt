@@ -5,7 +5,9 @@ use Bolt\Storage\Field\Type\FieldTypeInterface;
 use Bolt\Storage\Mapping\ClassMetadata;
 
 /**
- * Maps raw sql query data to Bolt Entities
+ * Maps raw sql query data to Bolt Entities.
+ *
+ * @author Ross Riley <riley.ross@gmail.com>
  */
 class Hydrator
 {
@@ -15,7 +17,6 @@ class Hydrator
     protected $metadata;
     /** @var FieldFactory */
     protected $fieldFactory;
-    
 
     /**
      * Constructor.
@@ -32,20 +33,18 @@ class Hydrator
         $this->metadata = $metadata;
         $this->fieldFactory = $fieldFactory;
     }
-    
+
     /**
      * Creates an entity ready for hydration.
-     * 
-     * @param array $source [description]
      *
-     * @return [type] [description]
+     * @return Entity
      */
-    public function create(array $source)
+    public function create()
     {
         $classname = $this->handler;
         $entity = new $classname;
         $entity->setContenttype($this->metadata->getBoltName());
-        
+
         return $entity;
     }
 
@@ -54,7 +53,7 @@ class Hydrator
      * @param array         $source data
      * @param EntityManager $em
      *
-     * @return mixed Entity
+     * @return Entity
      */
     public function hydrate($entity, array $source, EntityManager $em = null)
     {
@@ -66,7 +65,7 @@ class Hydrator
             } else {
                 $field = new $mapping['fieldtype']($mapping);
             }
-            
+
             $field->hydrate($source, $entity, $em);
         }
 
