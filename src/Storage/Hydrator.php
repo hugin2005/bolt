@@ -3,7 +3,6 @@ namespace Bolt\Storage;
 
 use Bolt\Storage\Field\Type\FieldTypeInterface;
 use Bolt\Storage\Mapping\ClassMetadata;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Maps raw sql query data to Bolt Entities
@@ -37,8 +36,9 @@ class Hydrator
     /**
      * Creates an entity ready for hydration.
      * 
-     * @param  array  $source [description]
-     * @return [type]         [description]
+     * @param array $source [description]
+     *
+     * @return [type] [description]
      */
     public function create(array $source)
     {
@@ -58,7 +58,6 @@ class Hydrator
      */
     public function hydrate($entity, array $source, EntityManager $em = null)
     {
-
         foreach ($this->metadata->getFieldMappings() as $key => $mapping) {
             // First step is to allow each Bolt field to transform the data.
             /** @var FieldTypeInterface $field */
