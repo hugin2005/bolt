@@ -23,5 +23,15 @@ class ContentLegacyService
     
     public function initialize($entity)
     {
+        $this->setupContenttype($entity);
+    }
+    
+    public function setupContenttype($entity)
+    {
+        if (is_string($entity->_contenttype)) {
+            $contenttype = $this->app['storage']->getContenttype($contenttype);
+        }
+
+        $entity->contenttype = $contenttype;
     }
 }

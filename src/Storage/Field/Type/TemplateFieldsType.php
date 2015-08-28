@@ -1,6 +1,11 @@
 <?php
 namespace Bolt\Storage\Field\Type;
 
+use Bolt\Storage\EntityManager;
+use Bolt\Storage\Hydrator;
+use Bolt\Storage\Mapping\ClassMetadata;
+use Bolt\Storage\Mapping\MetadataDriver;
+use Bolt\TemplateChooser;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -11,6 +16,39 @@ use Doctrine\DBAL\Types\Type;
  */
 class TemplateFieldsType extends FieldTypeBase
 {
+    
+    public $chooser;
+    public $metadata;
+    
+    public function __construct(array $mapping = [], TemplateChooser $chooser = null, MetadataDriver $metadata = null)
+    {
+        $this->mapping = $mapping;
+        $this->chooser = $chooser;
+        $this->metadata = $metadata;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function hydrate($data, $entity, EntityManager $em = null)
+    {
+        $key = $this->mapping['fieldname'];
+        $type = $this->getStorageType();
+        $value = $type->convertToPHPValue($data[$key], $em->createQueryBuilder()->getConnection()->getDatabasePlatform());
+        
+        if ($value) {
+            $metadata = new ClassMetadata(get_class($entity));
+            $currentTemplate = $this->chooser->record($data);
+            
+            if (isset($this->mapping['config'][$currentTemplate])) {
+                $mappings = $this->metadata->loadMetadataForFields($this->mapping['config'][$currentTemplate]['fields']);
+                $metadata->setFieldMappings($mappings);
+            }
+            $hydrator = new Hydrator($metadata);
+            $entity->templatefields = $hydrator->hydrate($value);
+        }
+    }
+    
     /**
      * {@inheritdoc}
      */
