@@ -3,6 +3,7 @@ namespace Bolt\Storage;
 
 use Bolt\Application;
 use Bolt\Storage\Entity;
+use Bolt\Storage\Mapping\Contenttype;
 
 /**
  * Legacy bridge for Content object backward compatibility.
@@ -47,7 +48,9 @@ class ContentLegacyService
     public function setupContenttype(Entity\Entity $entity)
     {
         if (is_string($entity->getContenttype())) {
-            $entity->contenttype = $this->app['storage']->getContenttype($entity->getContenttype());
+            $raw = $this->app['storage']->getContenttype($entity->getContenttype());
+            $ct = new ContentType($raw);
+            $entity->contenttype = $ct;
         }
     }
 }
