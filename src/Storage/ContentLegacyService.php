@@ -2,7 +2,7 @@
 namespace Bolt\Storage;
 
 use Bolt\Application;
-use Bolt\Legacy\ContentType;
+use Bolt\Storage\Mapping\ContentType;
 use Bolt\Storage\Entity;
 
 /**
