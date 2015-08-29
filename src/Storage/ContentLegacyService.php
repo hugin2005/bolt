@@ -3,7 +3,6 @@ namespace Bolt\Storage;
 
 use Bolt\Application;
 use Bolt\Storage\Mapping\ContentType;
-use Bolt\Storage\Entity;
 
 /**
  * Legacy bridge for Content object backward compatibility.
