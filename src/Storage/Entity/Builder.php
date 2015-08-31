@@ -43,10 +43,12 @@ class Builder
      *
      * @return object
      */
-    public function getEntity()
+    public function getEntity($entity = null)
     {
-        $class = $this->class;
-        $entity = new $class();
+        if ($entity === null) {
+            $class = $this->class;
+            $entity = new $class();
+        }
 
         return $entity;
     }
@@ -62,7 +64,7 @@ class Builder
     public function getFields(ClassMetadata $classMetadata = null)
     {
         $class = $this->class;
-        if ($classMetadata == null) {
+        if ($classMetadata === null) {
             $classMetadata = $this->metadata->loadMetadataForClass($class);
         }
 
@@ -76,9 +78,9 @@ class Builder
      *
      * @return object $entity
      */
-    public function create($data, ClassMetadata $classMetadata = null)
+    public function create($data, ClassMetadata $classMetadata = null, $entity = null)
     {
-        $entity = $this->getEntity();
+        $entity = $this->getEntity($entity);
         $fields = $this->getFields($classMetadata);
 
         // set fields
@@ -108,9 +110,9 @@ class Builder
      *
      * @return object $entity
      */
-    public function createFromDatabaseValues($data, ClassMetadata $classMetadata = null)
+    public function createFromDatabaseValues($data, ClassMetadata $classMetadata = null, $entity = null)
     {
-        $entity = $this->getEntity();
+        $entity = $this->getEntity($entity);
         $fields = $this->getFields($classMetadata);
 
         // set fields
