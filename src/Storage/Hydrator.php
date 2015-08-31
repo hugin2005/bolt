@@ -55,7 +55,7 @@ class Hydrator
      *
      * @return Entity
      */
-    public function hydrate($entity, array $source, EntityManager $em = null)
+    public function hydrate($entity, array $source, EntityManager $em)
     {
         foreach ($this->metadata->getFieldMappings() as $key => $mapping) {
             // First step is to allow each Bolt field to transform the data.
